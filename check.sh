@@ -158,7 +158,7 @@ function run_checker {
 	check_homework task5 1 5 # 1 pct, 5 tests
 	check_homework task6 3 5 # 3 pct, 5 tests
 	check_homework task7 2 15 # 3 pct, 15 tests
-    check_valgrind 2 5 15 # 2 pct, 10 tests, skip first 5
+    check_valgrind 2 3 13 # 2 pct, 10 tests, skip first 3
     check_readme 10 # 10 pct
     check_style
 

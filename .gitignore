@@ -1,1 +1,11 @@
 *.kate-swp
+tests-out/
+result
+test2.bmp
+output.bmp
+test.bmp
+*.out
+check16
+main
+interactive
+*.old
