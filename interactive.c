@@ -105,7 +105,8 @@ int main() {
                 case 'h':
                     // Apply Horizontal Flip
                     // reading command arguments
-                    scanf("%d", &index);/*
+                    scanf("%d", &index);
+                    /*
                     matrice = (int ***)malloc(N_list[index] * sizeof(int **));
                         for (int i = 0; i < N; i++) {
                             matrice[i] = (int **)malloc(M_list[index] * sizeof(int *));
@@ -146,11 +147,21 @@ int main() {
                         }
                     matrice = rotate_left(image_list[index], N_list[index], M_list[index]);
                     write_to_bmp(matrice , M_list[index], N_list[index], "./test2.bmp");
-                    image_list[index] = (int ***)realloc(image_list[index], M_list[index] * sizeof(int **));
+
+                    /*
+                    for (int i = 0; i < N_list[index]; i++) {
+                        for (int j = 0; j < M_list[index]; j++) {
+                            free(image_list[index][i][j]);
+                        }
+                        free(image_list[index][i]);
+                    }
+                    free (image_list[index]);
+
+                    image_list[index] = (int ***)malloc(M_list[index] * sizeof(int **));
                     for (int i = 0; i < M_list[index]; i++) {
-                        image_list[index][i] = (int **)realloc(image_list[index][i], N_list[index] * sizeof(int *));
+                        image_list[index][i] = (int **)malloc(N_list[index] * sizeof(int *));
                         for (int j = 0; j < N_list[index]; j++)
-                            image_list[index][i][j] = (int *)realloc(image_list[index][i][j], 3 * sizeof(int));
+                            image_list[index][i][j] = (int *)malloc(3 * sizeof(int));
                     }
 
                     for (int i = 0; i < M_list[index]; i++)
@@ -159,6 +170,17 @@ int main() {
                             image_list[index][i][j][1] = matrice[i][j][1];
                             image_list[index][i][j][2] = matrice[i][j][2];
                         }
+                    write_to_bmp(image_list[index], M_list[index], N_list[index], "./test.bmp");
+                    N = N_list[index];
+                    N_list[index] = M_list[index];
+                    M_list[index] = N;
+                    */
+
+                    image_list[index] = matrice;
+                    N = N_list[index];
+                    N_list[index] = M_list[index];
+                    M_list[index] = N;
+
                     break;
 
                 case 'c':
