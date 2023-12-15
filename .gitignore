@@ -9,3 +9,4 @@ check16
 main
 interactive
 *.old
+*.zip

@@ -1,4 +1,4 @@
-CFLAGS=-g -Wall -Werror
+CFLAGS=-Wall -Werror
 
 .PHONY: clean run-main run-interactive
 

@@ -21,8 +21,7 @@ int main(int argc, char **argv) {
 
 	char image_path2[100];
 	int N2, M2;
-	int ***image2;
-	
+
     scanf("%s %d %d", image_path, &N, &M);
 
     // Allocate memory for the image

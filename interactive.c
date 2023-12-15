@@ -124,15 +124,21 @@ int main() {
         case 'c':
             // Create Filter
             scanf("%d", &size);
+            if (index_filter == 0) {
+                filter_list = NULL;
+                filter_list = (float ***)malloc(sizeof(float **));
+                filter_size = (int *)malloc(sizeof(float));
+            } else {
             filter_list = (float ***)realloc(filter_list, (index_filter + 1) * sizeof(float **));
+            }
             filter_list[index_filter] = (float **)malloc(size * sizeof(float *));
             for (int i = 0; i < size; i++) {
                 filter_list[index_filter][i] = (float *)malloc(size * sizeof(float));
                 for (int j = 0; j < size; j++) {
                     scanf("%f", &filter_list[index_filter][i][j]);
                 }
-            }
             filter_size = (int *)realloc(filter_size, (index_filter + 1) * sizeof(int));
+            }
             filter_size[index_filter] = size;
             index_filter++;
             break;
@@ -144,68 +150,102 @@ int main() {
                 case 'f':
                     // Delete Filter
                     scanf("%d", &index);
-                    if (index_filter != 0) {
-                    for (int ii = index; ii < index_filter-1; ii++) {
-                        for (int i = 0; i < filter_size[ii]; i ++) {
-                            for (int j = 0; j < filter_size[ii]; j++) {
-                                filter_list[ii][i][j] = filter_list[ii+1][i][j];
-                            }
+                    if (index_filter == 1) {
+                        for (int i = 0; i < filter_size[0]; i++) {
+                            free(filter_list[0][i]);
                         }
-                    }
-                    }
-                    for (int i = 0; i < filter_size[index_filter]; i++) {
-                        free(filter_list[index_filter][i]);
-                    }
-                    if (index_filter != 0) {
-                        for (int i = index; i < index_filter-1; i++) {
+                        // free(filter_list[0]);
+                        free(filter_size);
+                        index_filter--;
+                    // } else if (index == index_filter) {
+                    } else {
+                        /*
+                        for (int ii = index; ii < index_filter -1; ii++) {
+                            filter_list[ii] = (float **)realloc(filter_list[ii], filter_size[ii+1] * sizeof(float *));
+                            for (int i = 0; i < filter_size[ii+1]; i++) {
+                                filter_list[ii][i] =
+                                (float *)realloc(filter_list[ii][i], filter_size[ii+1] * sizeof(float));
+                                for (int j = 0; j < filter_size[ii+1]; j++) {
+                                    filter_list[ii][i][j] = filter_list[ii+1][i][j];
+                                }
+                            }
+                            */
+                        /*
+                        for (int ii = index; ii < index_filter-1; ii++) {
+                            filter_list[ii] = (float **)malloc(filter_size[ii+1] * sizeof(float *));
+                            for (int i = 0; i < filter_size[ii+1]; i++) {
+                                filter_list[ii][i] = (float *)malloc(filter_size[ii+1] * sizeof(float ));
+                                for (int j = 0; j < filter_size[ii+1]; j++) {
+                                    filter_list[ii][i][j] = filter_list[ii+1][i][j];
+                                }
+                            }
+                            filter_size[ii] = filter_size[ii+1];
+                        }
+                        */
+                        for (int i = index; i < (index_filter-1); i++) {
+                            filter_list[i] = filter_list[i+1];
                             filter_size[i] = filter_size[i+1];
                         }
+                        // for (int i = 0; i < filter_size[index_filter]; i++) {
+                        //    free(filter_list[index_filter][i]);
+                        // }
+                        // free(filter_list[index_filter]);
+                        index_filter--;
                     }
-                    index_filter--;
-                    filter_size = (int *)realloc(filter_size, (index_filter + 1) * sizeof(int));
                     break;
 
                 case 'i':
                     // Delete Image
                     scanf("%d", &index);
-                    if (index_image !=0) {
-                    for (int ii = index; ii < index_image-1; ii++) {
-                        image_list[ii] = (int ***)malloc(N_list[ii+1] * sizeof(int **));
-                            for (int i = 0; i < N_list[ii+1]; i++) {
-                                image_list[ii][i] = (int **)malloc(M_list[ii+1] * sizeof(int *));
-                                for (int j = 0; j < M_list[ii+1]; j++) {
-                                    image_list[ii][i][j] = (int *)malloc(3 * sizeof(int));
-                                }
+                    if (index_image == 1) {
+                        for (int i = 0; i < N_list[0]; i++) {
+                            for (int j = 0; j < M_list[0]; j++) {
+                                free(image_list[0][i][j]);
                             }
-                        for (int i = 0; i < N_list[ii+1]; i ++) {
-                            for (int j = 0; j < M_list[ii+1]-1; j++) {
-                                image_list[ii][i][j][0] = image_list[ii+1][i][j][0];
-                                image_list[ii][i][j][1] = image_list[ii+1][i][j][1];
-                                image_list[ii][i][j][2] = image_list[ii+1][i][j][2];
-                            }
+                            free(image_list[0][i]);
                         }
-                    }
-                    }
-                    for (int i = 0; i < N_list[index_image]-1; i++) {
-                        for (int j = 0; j < M_list[index_image]-1; j++) {
-                            free(image_list[index_image][i][j]);
-                        }
-                        free(image_list[index_image][i]);
-                    }
-                    free(image_list[index_image]);
-                    if (index_image != 0) {
-                    for (int i = index; i < index_image-1; i++) {
-                        N_list[i] = N_list[i+1];
-                        M_list[i] = N_list[i+1];
-                    }
-                        index_image--;
-                        N_list = (int *)realloc(N_list, (index_image+1) * sizeof(int));
-                        M_list = (int *)realloc(N_list, (index_image+1) * sizeof(int));
-                    } else {
+                        // free(image_list[0]);
                         free(N_list);
                         free(M_list);
+                        index_image--;
+                    } else {
+                        /*
+                        for (int ii = index; ii < index_image-1; ii++) {
+                            image_list[ii] = (int ***)realloc(image_list[ii], N_list[ii+1] * sizeof(int **));
+                            for (int i = 0; i < N_list[ii+1]; i++) {
+                                image_list[ii][i] = (int **)realloc(image_list[ii][i], M_list[ii+1] * sizeof(int *));
+                                for (int j = 0; j < M_list[ii+1]; j++) {
+                                    image_list[ii][i][j] = (int *)realloc(image_list[ii][i][j], 3*sizeof(int));
+                                    image_list[ii][i][j][0] = image_list[ii][i][j][0];
+                                    image_list[ii][i][j][1] = image_list[ii][i][j][1];
+                                    image_list[ii][i][j][2] = image_list[ii][i][j][2];
+                                }
+                            }
+                        }
+                        */
+                        /*
+                        for (int ii = index; ii < index_image-1; ii++) {
+                            image_list[ii] = (int ***)malloc(N_list[ii+1] * sizeof(int **));
+                            for (int i = 0; i < N_list[ii+1]; i++) {
+                                image_list[ii][i] = (int **)malloc(N_list[ii+1] * sizeof(int *));
+                                for (int j = 0; j < M_list[ii+1]; j++) {
+                                    image_list[ii][i][j] = (int *)malloc(3*sizeof(int));
+                                    image_list[ii][i][j][0] = image_list[ii][i][j][0];
+                                    image_list[ii][i][j][1] = image_list[ii][i][j][1];
+                                    image_list[ii][i][j][2] = image_list[ii][i][j][2];
+                                }
+                            }
+                            N_list[ii] = N_list[ii+1];
+                            M_list[ii] = M_list[ii+1];
+                        }
+                        */
+                        for (int i = index; i < (index_image-1); i++) {
+                            image_list[i] = image_list[i+1];
+                            N_list[i] = N_list[i+1];
+                            M_list[i] = M_list[i+1];
+                        }
+                        index_image--;
                     }
-
                     break;
 
                 default: {}
