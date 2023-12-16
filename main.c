@@ -9,12 +9,12 @@ int main() {
 
     char image_path[100];
     int N, M;
-    //int x, y, h, w;
+    int x, y, h, w;
     //int rows, cols, new_R, new_G, new_B;
-    int filter_size;
-    float **filter;
+    // int filter_size;
+    // float **filter;
 
-    scanf("%s %d %d", image_path, &N, &M);
+    scanf("%s %d%d%d%d%d%d", image_path, &N, &M, &x, &y, &h, &w);
 
     // Allocate memory for the image
     int ***image = (int ***)malloc(N * sizeof(int **));
@@ -28,7 +28,7 @@ int main() {
     // Read the image
     read_from_bmp(image, N, M, image_path);
 
-
+    /*
     scanf("%d", &filter_size);
     filter = (float **)malloc(filter_size * sizeof(float *));
     for (int i = 0; i < filter_size; i++) {
@@ -37,9 +37,10 @@ int main() {
             scanf("%f", &filter[i][j]);
         }
     }
-    image = apply_filter(image, N, M, filter, filter_size);
-
-    write_to_bmp(image, N, M, output_file);
+    */
+    //image = apply_filter(image, N, M, filter, filter_size);
+    image = crop(image, N, M, x, y, h, w);
+    write_to_bmp(image, h, w, output_file);
 
     // Free memory
     for (int i = 0; i < N; i++) {
