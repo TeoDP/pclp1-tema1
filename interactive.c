@@ -3,6 +3,16 @@
 #include "imageprocessing.h"
 #include "bmp.h"
 
+void magicfree(int ***m, int N, int M) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            free(m[i][j]);
+        }
+        free(m[i]);
+    }
+    free(m);
+}
+
 int main() {
     const int word_size = 100;
     char path[word_size], command[3];
@@ -15,6 +25,7 @@ int main() {
     int rows = 0, cols = 0, R = 0, G = 0, B = 0;
     int size = 0;
     int isON = 1;
+    // int ***temp;
 
     // scanning for the command the user has chosen
     // and then running the adequate code for said command
@@ -22,8 +33,10 @@ int main() {
     int ****image_list = (int ****)malloc(sizeof(int ***));
     int *N_list = (int *)malloc(sizeof(int));
     int *M_list = (int *)malloc(sizeof(int));
-    float ***filter_list = (float ***)malloc(sizeof(float**));
-    int *filter_size = (int *)malloc(sizeof(int));
+    float ***filter_list = NULL;
+    int *filter_size = NULL;
+    // float ***filter_list = (float ***)malloc(sizeof(float**));
+    // int *filter_size = (int *)malloc(sizeof(int));
     while (isON) {
     // printf("insert command: ");
     scanf("%s", command);
@@ -154,42 +167,15 @@ int main() {
                         for (int i = 0; i < filter_size[0]; i++) {
                             free(filter_list[0][i]);
                         }
-                        // free(filter_list[0]);
+                        free(filter_list[0]);
                         free(filter_size);
                         index_filter--;
                     // } else if (index == index_filter) {
                     } else {
-                        /*
-                        for (int ii = index; ii < index_filter -1; ii++) {
-                            filter_list[ii] = (float **)realloc(filter_list[ii], filter_size[ii+1] * sizeof(float *));
-                            for (int i = 0; i < filter_size[ii+1]; i++) {
-                                filter_list[ii][i] =
-                                (float *)realloc(filter_list[ii][i], filter_size[ii+1] * sizeof(float));
-                                for (int j = 0; j < filter_size[ii+1]; j++) {
-                                    filter_list[ii][i][j] = filter_list[ii+1][i][j];
-                                }
-                            }
-                            */
-                        /*
-                        for (int ii = index; ii < index_filter-1; ii++) {
-                            filter_list[ii] = (float **)malloc(filter_size[ii+1] * sizeof(float *));
-                            for (int i = 0; i < filter_size[ii+1]; i++) {
-                                filter_list[ii][i] = (float *)malloc(filter_size[ii+1] * sizeof(float ));
-                                for (int j = 0; j < filter_size[ii+1]; j++) {
-                                    filter_list[ii][i][j] = filter_list[ii+1][i][j];
-                                }
-                            }
-                            filter_size[ii] = filter_size[ii+1];
-                        }
-                        */
                         for (int i = index; i < (index_filter-1); i++) {
                             filter_list[i] = filter_list[i+1];
                             filter_size[i] = filter_size[i+1];
                         }
-                        // for (int i = 0; i < filter_size[index_filter]; i++) {
-                        //    free(filter_list[index_filter][i]);
-                        // }
-                        // free(filter_list[index_filter]);
                         index_filter--;
                     }
                     break;
@@ -209,36 +195,6 @@ int main() {
                         free(M_list);
                         index_image--;
                     } else {
-                        /*
-                        for (int ii = index; ii < index_image-1; ii++) {
-                            image_list[ii] = (int ***)realloc(image_list[ii], N_list[ii+1] * sizeof(int **));
-                            for (int i = 0; i < N_list[ii+1]; i++) {
-                                image_list[ii][i] = (int **)realloc(image_list[ii][i], M_list[ii+1] * sizeof(int *));
-                                for (int j = 0; j < M_list[ii+1]; j++) {
-                                    image_list[ii][i][j] = (int *)realloc(image_list[ii][i][j], 3*sizeof(int));
-                                    image_list[ii][i][j][0] = image_list[ii][i][j][0];
-                                    image_list[ii][i][j][1] = image_list[ii][i][j][1];
-                                    image_list[ii][i][j][2] = image_list[ii][i][j][2];
-                                }
-                            }
-                        }
-                        */
-                        /*
-                        for (int ii = index; ii < index_image-1; ii++) {
-                            image_list[ii] = (int ***)malloc(N_list[ii+1] * sizeof(int **));
-                            for (int i = 0; i < N_list[ii+1]; i++) {
-                                image_list[ii][i] = (int **)malloc(N_list[ii+1] * sizeof(int *));
-                                for (int j = 0; j < M_list[ii+1]; j++) {
-                                    image_list[ii][i][j] = (int *)malloc(3*sizeof(int));
-                                    image_list[ii][i][j][0] = image_list[ii][i][j][0];
-                                    image_list[ii][i][j][1] = image_list[ii][i][j][1];
-                                    image_list[ii][i][j][2] = image_list[ii][i][j][2];
-                                }
-                            }
-                            N_list[ii] = N_list[ii+1];
-                            M_list[ii] = M_list[ii+1];
-                        }
-                        */
                         for (int i = index; i < (index_image-1); i++) {
                             image_list[i] = image_list[i+1];
                             N_list[i] = N_list[i+1];
@@ -258,13 +214,7 @@ int main() {
     }
     }
     for (int ii = 0; ii < index_image; ii++) {
-        for (int i = 0; i < N_list[ii]; i++) {
-            for (int j = 0; j < M_list[ii]; j++) {
-                free(image_list[ii][i][j]);
-            }
-            free(image_list[ii][i]);
-        }
-        free(image_list[ii]);
+        magicfree(image_list[ii], N_list[ii], M_list[ii]);
     }
     free(image_list);
     free(N_list);

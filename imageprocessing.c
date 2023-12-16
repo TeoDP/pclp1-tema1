@@ -2,6 +2,16 @@
 #include <stdlib.h>
 #include "imageprocessing.h"
 
+static void magicfree(int ***m, int N, int M) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            free(m[i][j]);
+        }
+        free(m[i]);
+    }
+    free(m);
+}
+
 //   Task 1
 int ***flip_horizontal(int ***image, int N, int M) {
     // alocam o matrice
@@ -16,9 +26,12 @@ int ***flip_horizontal(int ***image, int N, int M) {
     // pointerilor catre fiecare linie in sens invers
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
-            m[i][j] = image[i][M-j-1];
+            m[i][j][0] = image[i][M-j-1][0];
+            m[i][j][1] = image[i][M-j-1][1];
+            m[i][j][2] = image[i][M-j-1][2];
         }
     }
+    magicfree(image, N, M);
     return m;
 }
 
@@ -36,10 +49,12 @@ int ***rotate_left(int ***image, int N, int M) {
     // schimband indicii pentru a putea roti
     for (int i = 0; i < M; i++) {
         for (int j = 0; j < N; j++) {
-            m[i][j] = image[j][M-i-1];
+            m[i][j][0] = image[j][M-i-1][0];
+            m[i][j][1] = image[j][M-i-1][1];
+            m[i][j][2] = image[j][M-i-1][2];
         }
     }
-
+    magicfree(image, N, M);
     return m;
 }
 
@@ -57,10 +72,12 @@ int ***crop(int ***image, int N, int M, int x, int y, int h, int w) {
     // elementele necesare din matricea originala
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
-            m[i][j] = image[y+i][x+j];
+            m[i][j][0] = image[y+i][x+j][0];
+            m[i][j][1] = image[y+i][x+j][1];
+            m[i][j][2] = image[y+i][x+j][2];
         }
     }
-
+    magicfree(image, N, M);
     return m;
 }
 
@@ -97,7 +114,9 @@ int ***extend(int ***image, int N, int M, int rows, int cols, int new_R, int new
                     m[i][j][2] = new_B;
                 } else if (j < (M + cols)) {
                     // caz 3: corpul imaginii
-                    m[i][j] = image[i-rows][j-cols];
+                    m[i][j][0] = image[i-rows][j-cols][0];
+                    m[i][j][1] = image[i-rows][j-cols][1];
+                    m[i][j][2] = image[i-rows][j-cols][2];
                 } else {
                     // caz 4: marginea din dreapta
                     m[i][j][0] = new_R;
@@ -114,7 +133,7 @@ int ***extend(int ***image, int N, int M, int rows, int cols, int new_R, int new
             }
         }
     }
-
+    magicfree(image, N, M);
     return m;
 }
 
@@ -130,7 +149,6 @@ int ***paste(int ***image_dst, int N_dst, int M_dst, int *** image_src, int N_sr
             image_dst[i][j][2] = image_src[i-y][j-x][2];
         }
     }
-
     return image_dst;
 }
 
@@ -185,5 +203,6 @@ int ***apply_filter(int ***image, int N, int M, float **filter, int filter_size)
             }
         }
     }
+    magicfree(image, N, M);
     return m;
 }
