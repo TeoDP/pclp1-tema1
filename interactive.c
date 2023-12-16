@@ -57,8 +57,8 @@ int main() {
         case 's':
             // save
             // reading command arguments
-            scanf("%d%s", &index_image, path);
-            write_to_bmp(image_list[index_image], N_list[index_image], M_list[index_image], path);
+            scanf("%d%s", &index, path);
+            write_to_bmp(image_list[index], N_list[index], M_list[index], path);
             break;
 
         // because the commands are two letter long and C does not seem to
@@ -257,6 +257,27 @@ int main() {
             // printf("~~~ERROR!~~~\nThe command you have entered does not exist.\n~~~~~~~~~\n");
     }
     }
+    for (int ii = 0; ii < index_image; ii++) {
+        for (int i = 0; i < N_list[ii]; i++) {
+            for (int j = 0; j < M_list[ii]; j++) {
+                free(image_list[ii][i][j]);
+            }
+            free(image_list[ii][i]);
+        }
+        free(image_list[ii]);
+    }
+    free(image_list);
+    free(N_list);
+    free(M_list);
 
+    // ----------
+    for (int i = 0; i < index_filter; i ++) {
+        for (int j = 0; j < filter_size[i]; j++) {
+            free(filter_list[i][j]);
+        }
+        free(filter_list[i]);
+    }
+    free(filter_list);
+    free(filter_size);
     return 0;
 }
