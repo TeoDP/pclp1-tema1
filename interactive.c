@@ -168,10 +168,14 @@ int main() {
                             free(filter_list[0][i]);
                         }
                         free(filter_list[0]);
-                        free(filter_size);
+                        // free(filter_size);
                         index_filter--;
                     // } else if (index == index_filter) {
                     } else {
+                        for (int i = 0; i < filter_size[index]; i++) {
+                            free(filter_list[index][i]);
+                        }
+                        free(filter_list[index]);
                         for (int i = index; i < (index_filter-1); i++) {
                             filter_list[i] = filter_list[i+1];
                             filter_size[i] = filter_size[i+1];
@@ -190,11 +194,12 @@ int main() {
                             }
                             free(image_list[0][i]);
                         }
-                        // free(image_list[0]);
-                        free(N_list);
-                        free(M_list);
+                        free(image_list[0]);
+                        // free(N_list);
+                        // free(M_list);
                         index_image--;
                     } else {
+                        magicfree(image_list[index], N_list[index], M_list[index]);
                         for (int i = index; i < (index_image-1); i++) {
                             image_list[i] = image_list[i+1];
                             N_list[i] = N_list[i+1];
