@@ -18,26 +18,23 @@ int main() {
     char path[word_size], command[3];
     int N = 0, M = 0;
     int x = 0, y = 0, w = 0, h = 0;
-    int index_image = 0;
-    int index_filter = 0;
-    int index = 0;
-    int index_sec = 0;
+    int index_image = 0;    // total number of images
+    int index_filter = 0;   // total number of filters
+    int index = 0;          // temporary value
+    int index_sec = 0;      // temporary value
     int rows = 0, cols = 0, R = 0, G = 0, B = 0;
     int size = 0;
     int isON = 1;
-    // int ***temp;
-
-    // scanning for the command the user has chosen
-    // and then running the adequate code for said command
 
     int ****image_list = (int ****)malloc(sizeof(int ***));
     int *N_list = (int *)malloc(sizeof(int));
     int *M_list = (int *)malloc(sizeof(int));
     float ***filter_list = NULL;
     int *filter_size = NULL;
-    // float ***filter_list = (float ***)malloc(sizeof(float**));
-    // int *filter_size = (int *)malloc(sizeof(int));
+
     while (isON) {
+    // scanning for the command the user has chosen
+    // and then running the adequate code for said command
     // printf("insert command: ");
     scanf("%s", command);
     switch (command[0]) {
@@ -51,6 +48,8 @@ int main() {
             // load
             // reading command arguments
             scanf("%d%d%s", &N, &M, path);
+            // dynamically adding one more index to the first layer of the 4d array
+            // and then creating a 3d array on that index
             image_list = (int ****)realloc(image_list, (index_image+1) * sizeof(int ***));
                 image_list[index_image] = (int ***)malloc(N * sizeof(int **));
                 for (int i = 0; i < N; i++) {
@@ -59,6 +58,7 @@ int main() {
                         image_list[index_image][i][j] = (int *)malloc(3 * sizeof(int));
                     }
                 }
+            // using 2 more arrays to store the size of the images
             N_list = (int *)realloc(N_list, (index_image+1) * sizeof(int));
             M_list = (int *)realloc(M_list, (index_image+1) * sizeof(int));
             read_from_bmp(image_list[index_image], N, M, path);
@@ -137,6 +137,8 @@ int main() {
         case 'c':
             // Create Filter
             scanf("%d", &size);
+            // checking whether a filter already exists
+            // and allocating memory apropriately
             if (index_filter == 0) {
                 filter_list = NULL;
                 filter_list = (float ***)malloc(sizeof(float **));
@@ -163,14 +165,14 @@ int main() {
                 case 'f':
                     // Delete Filter
                     scanf("%d", &index);
+                    // checking whether there is more than one filter
+                    // and deallocating memory apropriately
                     if (index_filter == 1) {
                         for (int i = 0; i < filter_size[0]; i++) {
                             free(filter_list[0][i]);
                         }
                         free(filter_list[0]);
-                        // free(filter_size);
                         index_filter--;
-                    // } else if (index == index_filter) {
                     } else {
                         for (int i = 0; i < filter_size[index]; i++) {
                             free(filter_list[index][i]);
@@ -195,8 +197,6 @@ int main() {
                             free(image_list[0][i]);
                         }
                         free(image_list[0]);
-                        // free(N_list);
-                        // free(M_list);
                         index_image--;
                     } else {
                         magicfree(image_list[index], N_list[index], M_list[index]);
@@ -218,6 +218,7 @@ int main() {
             // printf("~~~ERROR!~~~\nThe command you have entered does not exist.\n~~~~~~~~~\n");
     }
     }
+    // deallocating all the memory left
     for (int ii = 0; ii < index_image; ii++) {
         magicfree(image_list[ii], N_list[ii], M_list[ii]);
     }

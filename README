@@ -1,0 +1,16 @@
+This project represents a homework I had at PCLP1 in 2023
+
+Main idea of the project: we must create a basic image editor that has some simple image manipulation functions
+
+Tasks:
+
+1. flip horizontal -> horizontally flip the image
+2. rotate left -> rotate the image to the left, once
+3. crop -> crop from origin (coordinates), according to size
+4. extend -> add an equal number of rows and columns to the original image
+5. copy paste -> paste from origin (coordinates) another picture loaded on disk
+6. apply filter -> apply an image modifying layer that morphs a pixel based on its adjacent pixels
+
+7. make a program that, based on keyboard-inserted input, could apply any of the functions from above, and then save those new images to disk
+
+for detailed information, check the comments on the code
