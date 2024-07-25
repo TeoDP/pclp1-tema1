@@ -15,4 +15,5 @@ main: main.c imageprocessing.c bmp.c
 	gcc main.c imageprocessing.c bmp.c $(CFLAGS) -o main
 
 clean:
-	rm -f main interactive
+	rm -f main interactive result
+	rm -r tests-out
